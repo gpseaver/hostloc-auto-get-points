@@ -4,7 +4,6 @@ import time
 import random
 import re
 
-
 # 随机生成用户空间链接
 def randomly_gen_uspace_url() -> list:
     url_list = []

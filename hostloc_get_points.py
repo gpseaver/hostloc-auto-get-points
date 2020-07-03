@@ -4,6 +4,7 @@ import time
 import random
 import re
 
+sckey = os.environ["SCKEY"]
 # 随机生成用户空间链接
 def randomly_gen_uspace_url() -> list:
     url_list = []
@@ -88,3 +89,4 @@ if __name__ == "__main__":
             continue
 
         print("程序执行完毕，获取积分过程结束")
+        requests.get('https://sc.ftqq.com/' + sckey + '.send?text="hostloc签到程序执行完毕，获取积分过程结束"')

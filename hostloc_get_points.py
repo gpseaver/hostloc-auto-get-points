@@ -2,7 +2,7 @@ import os
 from requests import Session as req_Session
 import time
 import random
-import re
+import re,requests
 
 sckey = os.environ["SCKEY"]
 # 随机生成用户空间链接

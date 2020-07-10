@@ -5,6 +5,9 @@ import random
 import re,requests
 
 sckey = os.environ["SCKEY"]
+
+
+
 # 随机生成用户空间链接
 def randomly_gen_uspace_url() -> list:
     url_list = []
@@ -32,7 +35,8 @@ def login(username: str, password: str) -> req_Session:
         "handlekey": "ls",
     }
     s = req_Session()
-    s.post(url=login_url, data=login_data, headers=headers)
+    res = s.post(url=login_url, data=login_data, headers=headers)
+    res.raise_for_status()
     return s
 
 
@@ -40,6 +44,7 @@ def login(username: str, password: str) -> req_Session:
 def check_login_status(s: req_Session, number_c: int) -> bool:
     test_url = "https://www.hostloc.com/home.php?mod=spacecp"
     res = s.get(test_url)
+    res.raise_for_status()
     res.encoding = "utf-8"
     test_title = re.findall("<title>.*?</title>", res.text)
     if test_title[0] != "<title>个人资料 -  全球主机交流论坛 -  Powered by Discuz!</title>":
@@ -58,9 +63,10 @@ def get_points(s: req_Session, number_c: int):
         for i in range(len(url_list)):
             url = url_list[i]
             try:
-                s.get(url)
+                res = s.get(url)
+                res.raise_for_status()
                 print("第", i + 1, "个用户空间链接访问成功")
-                time.sleep(5)  # 每访问一个链接后休眠4秒，以避免触发论坛的防cc机制
+                time.sleep(5)  # 每访问一个链接后休眠5秒，以避免触发论坛的防cc机制
             except Exception as e:
                 print("链接访问异常：" + str(e))
             continue
@@ -89,7 +95,8 @@ if __name__ == "__main__":
                 get_points(s, i + 1)
                 print("*" * 30)
             except Exception as e:
-                print("获取积分异常：" + str(e))
+                print("程序执行异常：" + str(e))
+                print("*" * 30)
             continue
 
         print("程序执行完毕，获取积分过程结束")
